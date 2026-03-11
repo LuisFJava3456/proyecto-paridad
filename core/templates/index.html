@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Par o Impar</title>
+</head>
+<body>
+     {% csrf_token %}
+    <h1>¿Es par o impar?</h1>
+
+    <input type="number" id="numero" placeholder="Escribe un número">
+    <button onclick="verificar()">Verificar</button>
+
+    <p id="resultado"></p>
+
+    <script>
+        function verificar() {
+            let numero = document.getElementById('numero').value;
+
+            fetch('/verificar/', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                body: 'numero=' + numero + '&csrfmiddlewaretoken=' + getCookie('csrftoken')
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('resultado').innerText = numero + ' es ' + data.resultado;
+            });
+        }
+
+        function getCookie(name) {
+            let value = `; ${document.cookie}`;
+            let parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+        }
+    </script>
+</body>
+</html>
