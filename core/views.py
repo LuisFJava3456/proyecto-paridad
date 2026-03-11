@@ -1,5 +1,8 @@
 from django.shortcuts import render
 from django.http import JsonResponse
+from rest_framework import viewsets
+from .models import Producto
+from .serializers import ProductoSerializer
 
 def index(request):
     return render(request, 'index.html')
@@ -9,3 +12,7 @@ def verificar_paridad(request):
         numero = int(request.POST.get('numero'))
         resultado = 'par' if numero % 2 == 0 else 'impar'
         return JsonResponse({'resultado': resultado})
+
+class ProductoViewSet(viewsets.ModelViewSet):
+    queryset = Producto.objects.all()
+    serializer_class = ProductoSerializer
